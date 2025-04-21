@@ -6,25 +6,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="http://d3js.org/d3.v6.js"></script>
+    <script src="js/medalEfficiency.js"></script>
     <title>CSS Test</title>
 </head>
 
 <body>
 
-<h1> 7CCSMSDV Introduction to Data Visualisation </h1>
-<p><b>King's College London</b><br>
-    Advanced Computing MSc <br>
-    Eunkyo Kim (ID: 24046919)</p>
+    <h1> 7CCSMSDV Introduction to Data Visualisation </h1>
+    <p><b>King's College London</b><br>
+        Advanced Computing MSc <br>
+        Eunkyo Kim (ID: 24046919)</p>
 
-<h2> Summer Olympic Dataset </h2>
+    <h2> Summer Olympic Dataset </h2>
 
-<h3> Description </h3>
+    <h3> Description </h3>
 
-<h4> Datasets </h4>
-<h4> Usage of Opensource </h4>
+    <h4> Datasets </h4>
+    <h4> Usage of Opensource </h4>
 
 
-<h3> Links to Visualisations </h3>
+    <h3> <b>Visualisations</b> </h3>
+
+    <div id="vis1">
+        <h2>Olympic Medal Efficiency by Country</h2>
+        <label>
+            Select Olympic Year:
+            <input type="range" id="year-slider" min="1984" max="2020" step="4" />
+        </label>
+
+        <span id="year-label">Year: 2000</span>
+
+
+            <svg id="my_dataviz" width="400" height="300"></svg>
+
+
+    </div>
+
+    <div id="vis2">
+        <h2>Racing bar chart of Medal Ranking</h2>
+    </div>
 
 </body>
 
