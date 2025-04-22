@@ -22,7 +22,7 @@ const path = d3.geoPath().projection(projection);
 
 const tooltip = d3.select("#tooltip");
 
-const geoURL = "data/world.geo.json";
+const geoURL = "../data/world.geo.json";
 
 Promise.all([
     d3.json(geoURL),
