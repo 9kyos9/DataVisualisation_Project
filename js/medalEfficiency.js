@@ -1,44 +1,45 @@
 /* global d3 */
 
-// SVG 설정
-const svg = d3.select("#my_dataviz")
-    .attr("width", 800)
-    .attr("height", 600);
+let efficiencyMap = new Map();
 
-const width = +svg.attr("width");
-const height = +svg.attr("height");
+// SVG setting
+const svgNode = d3.select("#map_graph").node().parentNode;
+const { width, height } = svgNode.getBoundingClientRect();
 
-// 지도 투영 설정
+const svg1 = d3.select("#map_graph")
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", `0 0 ${width} ${height - 70}`);
+
+
+// map
 const projection = d3.geoMercator()
-    .scale(100)
+    .scale(width / 6.5)
     .center([0, 20])
     .translate([width / 2, height / 2]);
 
 const path = d3.geoPath().projection(projection);
 
-// 색상 스케일 정의 (메달 효율성 기준)
-const colorScale = d3.scaleThreshold()
-    .domain([0.00001, 0.0001, 0.0005, 0.001, 0.002, 0.005])
-    .range(d3.schemeBlues[7]);
 
-const geojsonURL = "data/world.geojson";  // ✅ 로컬 버전
+const tooltip = d3.select("#tooltip");
+
+const geoURL = "data/world.geo.json";
 
 Promise.all([
-    d3.json(geojsonURL),
-    d3.csv("data/medal_efficiency.csv")  // 너가 업로드한 데이터
+    d3.json(geoURL),
+    d3.csv("../data/medal_efficiency_NOC_modified.csv")
 ]).then(([geoData, medalData]) => {
     initMap(geoData);
-    updateMap(2000, medalData); // 초기값: 2000
+    updateMap(2000, medalData);
 
-    d3.select("#year-slider").on("input", function () {
+    d3.select("#year-slider1").on("input", function () {
         const selectedYear = +this.value;
-        d3.select("#year-label").text("Year: " + selectedYear);
+        d3.select("#year-label1").text("Year: " + selectedYear);
         updateMap(selectedYear, medalData);
     });
 });
 
 function initMap(worldData) {
-    svg.append("g")
+    svg1.append("g")
         .attr("class", "countries")
         .selectAll("path")
         .data(worldData.features)
@@ -54,29 +55,62 @@ function initMap(worldData) {
                 .transition().duration(200)
                 .style("opacity", 1)
                 .attr("stroke", "black");
+
+            tooltip
+                .style("opacity", 1);
+        })
+        .on("mousemove", function (event, d) {
+            const info = efficiencyMap.get(d.id?.toUpperCase?.());
+
+
+            tooltip
+                .html(info
+                    ? `<strong>${d.properties.name}</strong><br/>
+                    Medal Efficiency: ${info.efficiency.toFixed(5)}`
+                    : `<strong>${d.properties.name}</strong><br/>
+                    Medal Efficiency: N/A`
+                )
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
         })
         .on("mouseleave", function () {
             d3.select(this)
                 .transition().duration(200)
                 .style("opacity", 0.8)
                 .attr("stroke", "#999");
+
+            tooltip
+                .style("opacity", 0);
         });
+
+
 }
 
 function updateMap(year, data) {
     const filtered = data.filter(d => +d.Year === year);
 
-    const efficiencyMap = new Map();
+    efficiencyMap = new Map(); // 재초기화
+
     filtered.forEach(d => {
-        efficiencyMap.set(d.NOC, +d["Medal Efficiency"]);
+        efficiencyMap.set(d.NOC.toUpperCase(), {
+            efficiency: +d["Medal Efficiency"],
+            noc: d.NOC
+        });
     });
 
-    svg.selectAll(".country")
+    const maxEfficiency = d3.max(filtered, d => +d["Medal Efficiency"]);
+
+    const colorScale = d3.scaleSequential()
+        .domain([0, 0.5 * maxEfficiency, maxEfficiency])
+        .range(["#fff9c4", "#f5c138","#ff9800"]);
+
+    svg1.selectAll(".country")
         .transition()
         .duration(500)
         .attr("fill", d => {
-            const code = d.id; // ISO Alpha-3 코드
-            const eff = efficiencyMap.get(code);
-            return eff != null ? colorScale(eff) : "#eee";
+            const info = efficiencyMap.get(d.id?.toUpperCase?.());
+            return info ? colorScale(info.efficiency) : "#eee";
         });
 }
+
+

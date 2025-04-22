@@ -13,12 +13,52 @@ body {
     justify-content: space-between;
 }
 
+#stacked-bar {
+    width: 90%;
+    height: auto;
+    display: block;
+    margin: auto;
+}
+
+#map_graph{
+    width: 100%;
+    height: auto;
+}
+
 #map, #bar-chart {
     width: 48%;
     height: 600px;
 }
 
-#year-slider {
+#year-slider1 {
     width: 100%;
     margin-top: 10px;
+}
+
+#year-slider2 {
+    width: 100%;
+    margin-top: 10px;
+}
+
+#tooltip {
+    position: absolute;
+    background: white;
+    padding: 6px 10px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    pointer-events: none;
+    font-size: 13px;
+    opacity: 0;
+}
+
+.x-axis path,
+.y-axis path,
+.x-axis line,
+.y-axis line {
+    stroke: #ccc;
+}
+
+.bar-label {
+    font-weight: bold;
+    fill: #222;
 }
