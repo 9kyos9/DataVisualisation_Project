@@ -24,11 +24,11 @@ const path = d3.geoPath().projection(projection);
 
 const tooltip = d3.select("#tooltip");
 
-const geoURL = "../data/world.geo.json";
+const geoURL = "data/world.geo.json";
 
 Promise.all([
     d3.json(geoURL),
-    d3.csv("../data/medal_efficiency_NOC_modified.csv")
+    d3.csv("data/medal_efficiency_NOC_modified.csv")
 ]).then(([geoData, medalData]) => {
     initMap(geoData);
     initLegend();
