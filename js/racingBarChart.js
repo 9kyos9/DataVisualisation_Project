@@ -2,6 +2,7 @@
 
 const margin = { top: 30, right: 300, bottom: 200, left: 100 };
 
+let currentData;
 
 // SVG 크기를 안전하게 가져오기
 const svgElement = d3.select("#stacked-bar").node().parentNode;
@@ -40,6 +41,7 @@ d3.csv("../data/top10_medals_per_year.csv").then(data => {
         d.Silver = +d.Silver;
         d.Bronze = +d.Bronze;
         d.Total = +d.Total;
+        currentData = data;
     });
 
     initStackedBar(data);
@@ -57,6 +59,45 @@ function initStackedBar(data) {
 
     updateStackedBar(data, +yearSlider.property("value"));
 }
+
+let playing = false;
+let playInterval = null;
+
+const playIcon = `
+<svg id="play-icon" width="20" height="20" viewBox="0 0 20 20" fill="#f5c138">
+  <polygon points="4,2 16,10 4,18"></polygon>
+</svg>`;
+
+const pauseIcon = `
+<svg id="pause-icon" width="20" height="20" viewBox="0 0 20 20" fill="#f5c138">
+  <rect x="4" y="2" width="4" height="16"></rect>
+  <rect x="12" y="2" width="4" height="16"></rect>
+</svg>`;
+
+d3.select("#play-button").on("click", function () {
+    const button = d3.select(this);
+    playing = !playing;
+
+    if (playing) {
+        button.html(pauseIcon);
+        playInterval = setInterval(() => {
+            const slider = d3.select("#year-slider2");
+            let year = +slider.property("value");
+            const maxYear = +slider.attr("max");
+            const step = +slider.attr("step");
+
+            year += step;
+            if (year > maxYear) year = +slider.attr("min");
+
+            slider.property("value", year);
+            d3.select("#year-label2").text("Year: " + year);
+            updateStackedBar(currentData, year);
+        }, 1000);
+    } else {
+        button.html(playIcon);
+        clearInterval(playInterval);
+    }
+});
 
 function updateStackedBar(data, year) {
 

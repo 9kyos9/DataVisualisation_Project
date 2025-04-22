@@ -7,18 +7,20 @@ const svgNode = d3.select("#map_graph").node().parentNode;
 const { width, height } = svgNode.getBoundingClientRect();
 
 const svg1 = d3.select("#map_graph")
-    .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", `0 0 ${width} ${height - 70}`);
-
+    .attr("viewBox", `0 0 ${width * 1.3} ${height *1.2}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("width", "100%")
+    .style("height", "auto")
+    .style("display", "block")
+    .style("margin", "auto");
 
 // map
 const projection = d3.geoMercator()
     .scale(width / 6.5)
-    .center([0, 20])
+    .center([0, 50])
     .translate([width / 2, height / 2]);
 
 const path = d3.geoPath().projection(projection);
-
 
 const tooltip = d3.select("#tooltip");
 
@@ -29,6 +31,7 @@ Promise.all([
     d3.csv("../data/medal_efficiency_NOC_modified.csv")
 ]).then(([geoData, medalData]) => {
     initMap(geoData);
+    initLegend();
     updateMap(2000, medalData);
 
     d3.select("#year-slider1").on("input", function () {
@@ -56,19 +59,15 @@ function initMap(worldData) {
                 .style("opacity", 1)
                 .attr("stroke", "black");
 
-            tooltip
-                .style("opacity", 1);
+            tooltip.style("opacity", 1);
         })
         .on("mousemove", function (event, d) {
             const info = efficiencyMap.get(d.id?.toUpperCase?.());
 
-
             tooltip
                 .html(info
-                    ? `<strong>${d.properties.name}</strong><br/>
-                    Medal Efficiency: ${info.efficiency.toFixed(5)}`
-                    : `<strong>${d.properties.name}</strong><br/>
-                    Medal Efficiency: N/A`
+                    ? `<strong>${d.properties.name}</strong><br/>Medal Efficiency: ${info.efficiency.toFixed(5)}`
+                    : `<strong>${d.properties.name}</strong><br/>Medal Efficiency: N/A`
                 )
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 28) + "px");
@@ -79,11 +78,8 @@ function initMap(worldData) {
                 .style("opacity", 0.8)
                 .attr("stroke", "#999");
 
-            tooltip
-                .style("opacity", 0);
+            tooltip.style("opacity", 0);
         });
-
-
 }
 
 function updateMap(year, data) {
@@ -102,7 +98,7 @@ function updateMap(year, data) {
 
     const colorScale = d3.scaleSequential()
         .domain([0, 0.5 * maxEfficiency, maxEfficiency])
-        .range(["#fff9c4", "#f5c138","#ff9800"]);
+        .range(["#fff9c4", "#f5c138", "#ff9800"]);
 
     svg1.selectAll(".country")
         .transition()
@@ -113,4 +109,69 @@ function updateMap(year, data) {
         });
 }
 
+function initLegend() {
+    const legendWidth = 320;
+    const legendHeight = 14;
 
+    const colorScale = d3.scaleSequential()
+        .domain([0, 0.5, 1]) // 초기 범위 (예시)
+        .range(["#fff9c4", "#f5c138", "#ff9800"]);
+
+    const legendSvg = d3.select("#legend")
+        .append("svg")
+        .attr("width", legendWidth)
+        .attr("height", 60);
+
+    const defs = legendSvg.append("defs");
+
+    const linearGradient = defs.append("linearGradient")
+        .attr("id", "legend-gradient")
+        .attr("x1", "0%")
+        .attr("x2", "100%")
+        .attr("y1", "0%")
+        .attr("y2", "0%");
+
+    linearGradient.selectAll("stop")
+        .data(colorScale.range().map((color, i, nodes) => {
+            return {
+                offset: `${(i / (nodes.length - 1)) * 100}%`,
+                color: color
+            };
+        }))
+        .enter().append("stop")
+        .attr("offset", d => d.offset)
+        .attr("stop-color", d => d.color);
+
+    legendSvg.append("rect")
+        .attr("x", 0)
+        .attr("y", 20)
+        .attr("width", legendWidth)
+        .attr("height", legendHeight)
+        .attr("stroke", "#ccc")
+        .attr("stroke-width", 0.5)
+        .style("fill", "url(#legend-gradient)");
+
+    legendSvg.append("text")
+        .attr("x", 0)
+        .attr("y", 15)
+        .text("Medal Efficiency")
+        .style("font-size", "13px")
+        .style("fill", "#333")
+        .style("font-weight", "500");
+
+    const legendScale = d3.scaleLinear()
+        .domain(colorScale.domain())
+        .range([0, legendWidth]);
+
+    const legendAxis = d3.axisBottom(legendScale)
+        .tickSize(6)
+        .tickFormat(d3.format(".4f"))
+        .ticks(6);
+
+    legendSvg.append("g")
+        .attr("transform", `translate(0, ${20 + legendHeight})`)
+        .call(legendAxis)
+        .selectAll("text")
+        .style("font-size", "11px")
+        .style("fill", "#333");
+}

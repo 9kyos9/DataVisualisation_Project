@@ -1,16 +1,23 @@
 *{
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Noto Sans KR", Arial, Helvetica, monospace, sans-serif;
 }
 
 body {
-    font-family: sans-serif;
-    margin: 20px;
+    margin: 5vw;
     background-color: #f9f9f9;
 }
 
 #visuals {
     display: flex;
     justify-content: space-between;
+}
+
+#map_graph {
+    width: 50%;
+    height: auto;
+    aspect-ratio: 16/9;
+    display: block;
+    margin: auto;
 }
 
 #stacked-bar {
@@ -20,15 +27,22 @@ body {
     margin: auto;
 }
 
-#map_graph{
-    width: 100%;
-    height: auto;
+
+#play-button {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px 10px;
+    margin-left: 10px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
 }
 
-#map, #bar-chart {
-    width: 48%;
-    height: 600px;
+#play-button:hover {
+    background-color: rgba(245, 193, 56, 0.2);
 }
+
 
 #year-slider1 {
     width: 100%;
@@ -61,4 +75,46 @@ body {
 .bar-label {
     font-weight: bold;
     fill: #222;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #ddd;
+    outline: none;
+    margin: 8px 0;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #f5c138;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    margin-top: -3px
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #f5c138;
+    cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    background: #ccc;
+    border-radius: 3px;
+    height: 6px;
+}
+
+input[type=range]::-moz-range-track {
+    background: #ccc;
+    border-radius: 3px;
+    height: 6px;
 }

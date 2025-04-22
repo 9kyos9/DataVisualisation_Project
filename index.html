@@ -13,13 +13,13 @@
 <body>
 
 <h1> 7CCSMSDV Introduction to Data Visualisation </h1>
-<p><b>King's College London</b><br>
-    Advanced Computing MSc <br>
-    Eunkyo Kim (ID: 24046919)</p>
+<h3>King's College London</h3>
+    <p> Advanced Computing MSc <br>
+    Eunkyo Kim <br>
+    k24046919
+    </p>
 
-<h2> Summer Olympic Dataset </h2>
-
-<h3> Description </h3>
+<h2> Description </h2>
 
 <h4> Datasets </h4>
 <h4> Usage of Opensource </h4>
@@ -30,23 +30,39 @@
 <div id="vis1" style="max-width: 100%; margin: auto;">
     <h2>Olympic Medal Efficiency by Country</h2>
     <p>Select Olympic Year:</p>
-    <label>
-        <input type="range" id="year-slider1" min="1984" max="2024" step="4" style="max-width: 50%; margin: auto;"/>
-    </label>
 
-    <span id="year-label1">Year: 2000</span>
+    <div id="slider-wrapper1" style="display: flex; align-items: center; gap: 8px;">
+        <label style="display: block; margin-bottom: 1.5rem;">
+            <input type="range" id="year-slider1" min="1980" max="2024" step="4" style="max-width: 50%; margin: auto;"/>
+            <span id="year-label1">Year: 2000</span>
+        </label>
 
+    </div>
 
-    <svg id="map_graph" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet"></svg>
-    <div id="tooltip"></div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <svg id="map_graph"></svg>
+        <div id="tooltip"></div>
+    </div>
+    <div id="legend" style="max-width: 320px; margin: 2rem auto;"></div>
 
 </div>
 
 <div id="vis2" style="max-width: 100%; margin: auto;">
     <h2>Top 10 Countries by Medal Count (Stacked)</h2>
     <p>Select Olympic Year:</p>
-    <label><input type="range" id="year-slider2" min="1896" max="2024" step="4" value="2000" style="max-width: 50%; margin: auto;"></label>
-    <span id="year-label2">Year: 2000</span>
+
+    <div id="slider-wrapper2" style="display: flex; align-items: center; gap: 8px;">
+        <button id="play-button" aria-label="Play">
+            <svg id="play-icon" width="20" height="20" viewBox="0 0 20 20" fill="#f5c138">
+                <polygon points="4,2 16,10 4,18"></polygon>
+            </svg>
+        </button>
+
+        <label>
+            <input type="range" id="year-slider2" min="1980" max="2024" step="4" value="2000" style="max-width: 50%; margin: auto;">
+            <span id="year-label2">Year: 2000</span>
+        </label>
+    </div>
     <svg id="stacked-bar"></svg>
 </div>
 
