@@ -34,7 +34,7 @@ const nocToIso = {
     FRG: "de", GDR: "de", TCH: "cz", YUG: "rs"
 };
 
-d3.csv("../data/top10_medals_per_year.csv").then(data => {
+d3.csv("data/top10_medals_per_year.csv").then(data => {
     data.forEach(d => {
         d.Year = +d.Year;
         d.Gold = +d.Gold;
