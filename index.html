@@ -13,19 +13,46 @@
 <body>
 
 <h1> 7CCSMSDV Introduction to Data Visualisation </h1>
-<h3>King's College London</h3>
-    <p> Advanced Computing MSc <br>
-    Eunkyo Kim <br>
-    k24046919
+<div style="text-align: right">
+    <h3>King's College London</h3>
+    <p> Eunkyo Kim <br>
+        k24046919<br>
+        Advanced Computing MSc
     </p>
+</div>
 
 <h2> Description </h2>
+<p>Two visualisations are designed and implemented to support Q1:
+    <br><b>"Analyse the development of teams’ performances over time. Are
+    there detectable trends in the performance of teams over the last decade?"</b></p>
+<ul>
+    <li>Choropleth Map - Medal efficiency by country</li>
+    <li>Racing Stacked Bar - Top 10 countries by medal count </li>
+</ul>
 
-<h4> Datasets </h4>
-<h4> Usage of Opensource </h4>
+<h3> Datasets </h3>
+<p>A single data source (provided on KEATS) is used for the visualisations.</p>
+<ul>
+    <li>Summer Olympics Medals (1896-2024): https://www.kaggle.com/datasets/stefanydeoliveira/summer-olympics-medals-1896-2024?resource=download</li>
+</ul>
 
+<h3> Simple Guide for Visualisations </h3>
+<ul>
+    <li><b>Choropleth Map</b>
+        <ul style="list-style-type: circle;">
+            <li>By Controlling the slider above the map, the map will be updated to the information of the year.</li>
+        </ul>
 
-<h3><b>Visualisations</b></h3>
+    <li><b>Racing Bar Chart</b>
+        <br> There are two ways to interact with this visualization:
+    <ul style="list-style-type: circle;">
+        <li>Manually adjusting the slider</li>
+        <li>Watching the chart animate automatically using the play button next to the slider.</li>
+    </ul>
+    </li>
+</ul>
+
+<hr style="border: none; height: 2px; background-color: #ccc; margin: 50px 0;">
 
 <div id="vis1" style="max-width: 100%; margin: auto;">
     <h2>Olympic Medal Efficiency by Country</h2>
@@ -46,6 +73,9 @@
     <div id="legend" style="max-width: 320px; margin: 2rem auto;"></div>
 
 </div>
+
+<hr style="border: none; height: 2px; background-color: #ccc; margin: 50px 0;">
+
 
 <div id="vis2" style="max-width: 100%; margin: auto;">
     <h2>Top 10 Countries by Medal Count (Stacked)</h2>
